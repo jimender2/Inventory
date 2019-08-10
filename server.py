@@ -24,10 +24,43 @@ def threaded(conn, addr):
         try:
             dat = tool.recv_msg(conn)
             data = json.loads(dat)
-            print_lock.acquire()
-            tool.create_pcap_row(db, values)
-            print_lock.release()
-            print(addr)
+            print(data)
+            print(data["user"])
+            if data["user"] == "jj":
+                if data["password"] == "jj":
+
+                    # Generate token
+                    token = tool.randomString(15)
+
+                    # Encode and Send token back to client
+                    msg = {}
+                    msg["token"] = token
+                    tool.send_msg(msg)
+
+                    while True:
+
+                        dat = tool.recv_msg(conn)
+                        data = json.loads(dat)
+
+                        if data["token"] != token:
+                            break
+
+                        if data["command"] == "checkout":
+                            checkout()
+                        elif data["command"] == "checkin":
+                            checkin()
+                        elif data["command"] == "IDK":
+                            idk()
+                        else:
+                            tool.send_msg("Error. Something was wrong with your command.")
+
+            print("Fail")
+            conn.close()
+
+            # print_lock.acquire()
+            # tool.create_pcap_row(db, values)
+            # print_lock.release()
+            # print(addr)
         except Error as e:
             print("Error")
             print(e)

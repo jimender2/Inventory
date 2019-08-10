@@ -1,7 +1,7 @@
 #!usr/bin/python3
 # This project is the beginning of the wifi triangulation problem.
 
-import os
+import string
 import struct
 import socket
 import sqlite3
@@ -135,3 +135,16 @@ def recvall(sock, n):
             return None
         data += packet
     return data
+
+
+"""
+Misc FUNCTIONS
+----------------
+randomString(stringLength)
+
+"""
+
+
+def randomString(stringLength=10):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
